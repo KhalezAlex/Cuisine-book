@@ -18,7 +18,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/", "/home", "/request").permitAll()
+                        .antMatchers("/", "/home", "/request", "/firstTask", "/secondTask").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -41,7 +41,7 @@ public class WebSecurityConfig {
         UserDetails admin =
                 User.withDefaultPasswordEncoder()
                         .username("admin")
-                        .password("adminPassword")
+                        .password("admin")
                         .roles("ADMIN")
                         .build();
         InMemoryUserDetailsManager detailsManager = new InMemoryUserDetailsManager();
