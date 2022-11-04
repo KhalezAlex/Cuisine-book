@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 @Controller
 public class InitializeBaseController {
     LinkedList<Recipe> book = new LinkedList<>();
     private final LinkedList<String> listNames = new LinkedList<>();
+    private Set<String> setOfIngredients = new HashSet<>();
     private final String[] paths = {"Caucasian.txt", "French.txt", "Mexican.txt", "Russian.txt"};
     @GetMapping("/")
     public String initializeBase(Model model) throws IOException {
@@ -21,14 +24,10 @@ public class InitializeBaseController {
         flushBase();
         for (String path: paths)
             book.addAll(Reader.getCuisine(path));
-        for (Recipe r: book) {
-            r.printRecipe();
-        }
         initListNames();
-        for (String name: listNames) {
-            System.out.println(name);
-        }
+        initSetOfIngredients();
         model.addAttribute("listNames", listNames);
+        model.addAttribute("setOfIngredients", setOfIngredients);
         return "index";
     }
 
@@ -58,8 +57,15 @@ public class InitializeBaseController {
 
     private void initListNames(){
         if(!book.isEmpty())
-            for(Recipe n : book)
-                listNames.add(n.getName());
+            for(Recipe r : book)
+                listNames.add(r.getName());
+    }
+
+    private void initSetOfIngredients() {
+        if (!book.isEmpty())
+            for (Recipe r: book)
+                if (!r.getIngredients().isEmpty())
+                    setOfIngredients.addAll(r.getIngredients());
     }
 
     @GetMapping("/secondTask")

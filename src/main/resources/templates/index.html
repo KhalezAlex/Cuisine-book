@@ -18,8 +18,8 @@
     <input type="submit" value="submit">
 </form>
 <form id="selectIngredient">
-    <select>
-
+    <select id="ingredients">
+        <option th:each="ingr:${setOfIngredients}" th:text="${ingr}">
     </select>
 </form>
 <p th:if="${name} != null" th:text="${name}"></p>
