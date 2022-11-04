@@ -1,11 +1,11 @@
-package comklozevitz.cuisinebook;
+package comklozevitz.cuisinebook.entities;
 
 import java.util.LinkedList;
 
 public class Recipe {
     private String name;
     private String cuisine;
-    private String ingredients;
+    private LinkedList<String> ingredients;
     private LinkedList<String> tags;
     private String technology;
     private String link;
@@ -28,11 +28,11 @@ public class Recipe {
         this.cuisine = cuisine;
     }
 
-    public String getIngredients() {
+    public LinkedList<String> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(String ingredients) {
+    public void setIngredients(LinkedList<String> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -68,7 +68,7 @@ public class Recipe {
         this.rating = rating;
     }
 
-    public Recipe(String name, String cuisine, String ingredients,
+    public Recipe(String name, String cuisine, LinkedList<String> ingredients,
                   LinkedList<String> tags, String technology, int rating) {
         this.name = name;
         this.cuisine = cuisine;
@@ -79,7 +79,7 @@ public class Recipe {
         this.link = "youtube.com";
     }
 
-    public Recipe(String name, String cuisine, String ingredients, LinkedList<String> tags,
+    public Recipe(String name, String cuisine, LinkedList<String> ingredients, LinkedList<String> tags,
                   String technology, String link, int rating) {
         this.name = name;
         this.cuisine = cuisine;
@@ -88,5 +88,16 @@ public class Recipe {
         this.technology = technology;
         this.link = link;
         this.rating = rating;
+    }
+
+    public void printRecipe() {
+        System.out.println(this.name);
+        System.out.println(this.cuisine);
+        System.out.println(this.ingredients);
+        System.out.println(this.tags);
+        System.out.println(this.technology);
+        System.out.println(this.link);
+        System.out.println(this.rating);
+        System.out.println();
     }
 }

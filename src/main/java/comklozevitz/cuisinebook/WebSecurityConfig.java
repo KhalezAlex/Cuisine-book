@@ -1,4 +1,4 @@
-package com.klozevitz.cuisinebook;
+package comklozevitz.cuisinebook;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
