@@ -1,6 +1,9 @@
 package comklozevitz.cuisinebook.entities;
 
+import comklozevitz.cuisinebook.utilities.Reader;
+
 import java.sql.SQLOutput;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 public class Recipe {

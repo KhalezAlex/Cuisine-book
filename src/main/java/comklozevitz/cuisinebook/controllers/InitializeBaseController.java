@@ -5,45 +5,47 @@ import comklozevitz.cuisinebook.utilities.Reader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Controller
 public class InitializeBaseController {
-    LinkedList<Recipe> book = new LinkedList<>();
-    private final LinkedList<String> listNames = new LinkedList<>();
-    private Set<String> setOfIngredients = new HashSet<>();
+    private static LinkedList<Recipe> book = new LinkedList<>();
+    private static LinkedList<String> namesList = new LinkedList<>();
+    private static Set<String> setOfIngredients = new TreeSet<>();
     private final String[] paths = {"Caucasian.txt", "French.txt", "Mexican.txt", "Russian.txt"};
+
+    public static Set<String> getSetOfIngredients() {
+        return setOfIngredients;
+    }
+
+    public static LinkedList<String> getNamesList() {
+        return namesList;
+    }
+
+    public static LinkedList<Recipe> getBook() {
+        return book;
+    }
+
     @GetMapping("/")
     public String initializeBase(Model model) throws IOException {
-        System.out.println("initialiseBase start");
         flushBase();
         for (String path: paths)
             book.addAll(Reader.getCuisine(path));
         initListNames();
         initSetOfIngredients();
-        model.addAttribute("listNames", listNames);
+        model.addAttribute("listNames", namesList);
         model.addAttribute("setOfIngredients", setOfIngredients);
+        model.addAttribute("allTags", SecondTaskController.getAllTags());
         return "index";
     }
 
-    @GetMapping("/firstTask")
-    public String infoRecipe(Model model, @RequestParam(required = false) String name){
-        Recipe recipe = getInfoRecipe(name);
-        if(recipe != null) {
-            model.addAttribute("name", recipe.getName());
-            model.addAttribute("cuisine", recipe.getCuisine());
-            model.addAttribute("type", recipe.getType());
-            model.addAttribute("ingredients", recipe.getIngredients());
-            model.addAttribute("listNames", listNames);
-        }
-        return "index";
-    }
-    private Recipe getInfoRecipe(String name) {
+
+    static Recipe getInfoRecipe(String name) {
         for (Recipe recipe : book)
             if (recipe.getName().equals(name))
                 return recipe;
@@ -58,25 +60,15 @@ public class InitializeBaseController {
     private void initListNames(){
         if(!book.isEmpty())
             for(Recipe r : book)
-                listNames.add(r.getName());
+                namesList.add(r.getName());
     }
 
     private void initSetOfIngredients() {
+        HashSet<String> temp = new HashSet<>();
         if (!book.isEmpty())
             for (Recipe r: book)
                 if (!r.getIngredients().isEmpty())
-                    setOfIngredients.addAll(r.getIngredients());
-    }
-
-    @GetMapping("/secondTask")
-    public String linkRecipe(Model model, @RequestParam(required = false) String name) {
-        Recipe recipe = getInfoRecipe(name);
-        if(recipe != null) {
-            model.addAttribute("name", recipe.getName());
-            model.addAttribute("technology", recipe.getTechnology());
-            model.addAttribute("link" , recipe.getLink());
-            model.addAttribute("listNames", listNames);
-        }
-        return "index";
+                    temp.addAll(r.getIngredients());
+        setOfIngredients.addAll(temp);
     }
 }

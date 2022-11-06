@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Task1AB</title>
+</head>
+<body>
+<div>
+    <p th:if="${name} != null" th:text="${name}"></p>
+    <p th:if="${cuisine} != null" th:text="${cuisine}"></p>
+    <p th:if="${type} != null" th:text="${type}"></p>
+    <p th:if="${ingredients} != null" th:text="${ingredients}"></p>
+    <a th:if="${technology} != null" th:href="${technology}">Recipe</a>
+    <br>
+    <a th:if="${link} != null" th:href="${link}">youtube</a>
+    <br>
+    <form action="/">
+        <input type="submit" value="назад к поиску">
+    </form>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.js"></script>
+</body>
+</html>

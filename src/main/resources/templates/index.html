@@ -7,58 +7,111 @@
     <title>Cuisine-book</title>
 </head>
 <body>
-<form id="recipeRequest">
+<form id="firstAB">
+    <p>Запрос по значению</p>
     <select id="selectDish" name="name">
         <option th:each="name:${listNames}" th:text="${name}"></option>
     </select>
-    <label for="firstTaskRadio">Краткая информация по рецепту</label>
-    <input id="firstTaskRadio" type="radio" name="isLink" value="/firstTask">
-    <label for="secondTaskRadio">Рецепт или ссылка</label>
-    <input id="secondTaskRadio" type="radio" name="isLink" value="/secondTask">
-    <input type="submit" value="submit">
+    <div>
+        <label for="firstARadio">Краткая информация по рецепту</label>
+        <input id="firstARadio" type="radio" name="isLink" value="/firstA">
+        <label for="firstBRadio">Рецепт или ссылка</label>
+        <input id="firstBRadio" type="radio" name="isLink" value="/firstB">
+    </div>
+    <input type="submit" value="запрос">
 </form>
-<form id="selectIngredient">
-    <select id="ingredients">
+
+
+<form id="firstC" action="/firstC">
+    <p>Запрос по списку ингридиентов</p>
+    <select id="selectIngredients">
         <option th:each="ingr:${setOfIngredients}" th:text="${ingr}">
     </select>
+    <div>
+        <input id="ingr1" name="ingr1" type="text" hidden>
+        <input id="ingr2" name="ingr2" type="text" hidden>
+        <input id="ingr3" name="ingr3" type="text" hidden>
+        <input id="ingr4" name="ingr4" type="text" hidden>
+    </div>
+    <input type="submit" value="запрос">
 </form>
-<p th:if="${name} != null" th:text="${name}"></p>
-<p th:if="${cuisine} != null" th:text="${cuisine}"></p>
-<p th:if="${type} != null" th:text="${type}"></p>
-<p th:if="${ingredients} != null" th:text="${ingredients}"></p>
-<a th:if="${technology} != null" th:href="${technology}">Recipe</a>
-<br>
-<a th:if="${link} != null" th:href="${link}">youtube</a>
+
+
+<form id="randomRequest" action="/firstD">
+    <p>Запрос случайного рецепта</p>
+    <input type="submit" value="Получить">
+</form>
+
+
+<form id="allTagsRequest" action="/secondA">
+    <p>Запрос списка тегов</p>
+    <input type="submit" value="Получить">
+</form>
+
+<form id="top3RecipesByTag" action="/secondB">
+    <p>Топ 3 рецепта в категории</p>
+    <select id="selectTag" name="tag">
+        <option th:each="tag:${allTags}" th:text="${tag}"></option>
+    </select>
+    <input type="submit" value="Получить">
+</form>
+
+
+
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.js"></script>
 
 <script>
+    let firstARadio = $('#firstARadio');
+    let firstBRadio = $('#firstBRadio');
+    let firstAB = $('#firstAB');
     $.ajax({
         url: "/",
         type: "GET",
         contentType: "html"
     });
 
+    let ingredientsAmount = 0;
+    let selectIngredients = $('#selectIngredients')
+    selectIngredients.change(function () {
+        ingredientsAmount++;
+        if (ingredientsAmount < 5) {
+            let input = $('#ingr' + ingredientsAmount);
+            input.val(selectIngredients.val());
+            input.show();
+        } else {
+            for (let i = 1; i < 5; i++) {
+                let input = $('#ingr' + i);
+                input.val("");
+                input.hide();
+            }
+            ingredientsAmount = 1;
+            let input = $('#ingr' + ingredientsAmount);
+            input.val(selectIngredients.val());
+            input.show();
+        }
+    })
+
     $('#selectDish').change(function () {
         let isLink = document.querySelectorAll('input[name = "isLink"]')
         for (let link of isLink)
             if (link.checked)
-                $('#recipeRequest').attr("action", link.value);
+                firstAB.attr("action", link.value);
     });
 
-    $('#firstTaskRadio').change(function () {
-        if (!$('#firstTaskRadio').is("checked", true))
-            $('#recipeRequest').attr("action", $('#firstTaskRadio').val())
-    })
+    firstARadio.change(function () {
+        if (!firstARadio.is("checked", true))
+            firstAB.attr("action", firstARadio.val())
+    });
 
-    $('#secondTaskRadio').change(function () {
-        if(!$('#secondTaskRadio').is("checked", true))
-            $('#recipeRequest').attr("action", $('#secondTaskRadio').val())
-    })
+    firstBRadio.change(function () {
+        if(!firstBRadio.is("checked", true))
+            firstAB.attr("action", firstBRadio.val())
+    });
 
-    $('#firstTaskRadio').prop('checked', true);
-    $('#recipeRequest').attr("action", "/firstTask");
+    firstARadio.prop('checked', true);
+    firstAB.attr("action", "/firstA");
 </script>
 </body>
 </html>

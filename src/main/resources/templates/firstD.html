@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+</html>
+<head>
+    <meta charset="UTF-8">
+    <title>Случайный рецепт</title>
+</head>
+<body>
+<div>
+    <p th:text="${recipe.name}"></p>
+    <p th:text="${recipe.getCuisine()}"></p>
+    <p th:text="${recipe.getIngredients()}"></p>
+    <a th:href="${recipe.getTechnology()}"> Recipe </a>
+</div>
+<form action="/">
+    <input type="submit" value="назад к поиску">
+</form>
+</body>
+</html>

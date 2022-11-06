@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"></html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Топ 3 блюда в категории</title>
+</head>
+<body>
+    <div>
+        <p th:each="recipe:${top3}" th:text="${recipe.getName()}"></p>
+    </div>
+
+    <form action="/">
+        <input type="submit" value="назад к поиску">
+    </form>
+</body>
+</html>
