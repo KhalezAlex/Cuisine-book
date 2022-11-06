@@ -19,7 +19,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .antMatchers("/", "/firstA", "/firstB", "/firstC", "/firstD",
-                                "/secondA", "/secondB").permitAll()
+                                "/secondA", "/secondB", "/secondC", "/secondD").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

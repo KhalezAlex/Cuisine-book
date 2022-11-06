@@ -44,4 +44,30 @@ public class SecondTaskController {
         model.addAttribute("top3", recipesByTag);
         return "secondB";
     }
+
+
+    @GetMapping("/secondC")
+    public String secondC(Model model) {
+        String[] tags = {"первые блюда", "вторые блюда", "десерты"};
+        LinkedList<Recipe> recipes = new LinkedList<>();
+        for (String tag : tags)
+            recipes.add(getRandomDishByTag(tag));
+        model.addAttribute("dinner", recipes);
+        return "secondC";
+    }
+
+    @GetMapping("/secondD")
+    public String secondD(Model model) {
+        model.addAttribute("recipe", getRandomDishByTag("завтраки"));
+        return "secondD";
+    }
+
+    private static Recipe getRandomDishByTag(String tag){
+        LinkedList<Recipe> recipesByTag = new LinkedList<>();
+        for (Recipe recipe : InitializeBaseController.getBook())
+            if(recipe.getTags().contains(tag))
+                recipesByTag.add(recipe);
+        int randomIndex = (int) (Math.random()*recipesByTag.size());
+        return recipesByTag.get(randomIndex);
+    }
 }
