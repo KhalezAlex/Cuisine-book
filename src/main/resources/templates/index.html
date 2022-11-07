@@ -37,18 +37,18 @@
 </form>
 
 
-<form id="randomRequest" action="/firstD">
+<form id="firstD" action="/firstD">
     <p>Запрос случайного рецепта</p>
     <input type="submit" value="Получить">
 </form>
 
 
-<form id="allTagsRequest" action="/secondA">
+<form id="secondA" action="/secondA">
     <p>Запрос списка тегов</p>
     <input type="submit" value="Получить">
 </form>
 
-<form id="top3RecipesByTag" action="/secondB">
+<form id="secondB" action="/secondB">
     <p>Топ 3 рецепта в категории</p>
     <select id="selectTag" name="tag">
         <option th:each="tag:${allTags}" th:text="${tag}"></option>
@@ -57,17 +57,52 @@
 </form>
 
 
-<form id="randomDinner" action="/secondC">
+<form id="secondC" action="/secondC">
     <p>Ужин из 3 блюд</p>
     <input type="submit" value="Получить">
 </form>
 
 
-<form id="randomBreakfast" action="/secondD">
+<form id="secondD" action="/secondD">
     <p>Случайный завтрак</p>
     <input type="submit" value="Получить">
 </form>
 
+<form id="secondE" action="/secondE">
+    <p>Получить блюда, не содержащие конкретных ингридиентов</p>
+    <select id="selectIngredientsSecondD">
+        <option th:each="ingr:${setOfIngredients}" th:text="${ingr}">
+    </select>
+    <div>
+        <input id="ingr1secD" name="ingr1" type="text" hidden>
+        <input id="ingr2secD" name="ingr2" type="text" hidden>
+        <input id="ingr3secD" name="ingr3" type="text" hidden>
+        <input id="ingr4secD" name="ingr4" type="text" hidden>
+    </div>
+    <input type="submit" value="запрос">
+</form>
+
+
+<form id="thirdA" action="/thirdA">
+    <p>Получить топ 3 блюд по конкретной кухне мира</p>
+    <select id="selectCuisine" name="cuisine">
+        <option>кавказская кухня</option>
+        <option>мексиканская кухня</option>
+        <option>русская кухня</option>
+        <option>французская кухня</option>
+    </select>
+    <input type="submit" value="запрос">
+</form>
+
+<form id=thirdB action="/thirdB">
+    <p>Топ 3 кухонь мира</p>
+    <input type="submit" value="Запрос">
+</form>
+
+<a th:if="${isAdmin}" th:href="@{/addRecipe}">добавить рецепт</a>
+<form action="/login">
+    <input type="submit" value="sign in">
+</form>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.js"></script>
 
 <script>
@@ -101,6 +136,27 @@
         }
     })
 
+    let ingredientsAmountSecondD = 0;
+    let selectIngredientsSecondD = $('#selectIngredientsSecondD')
+    selectIngredientsSecondD.change(function () {
+        ingredientsAmountSecondD++;
+        if (ingredientsAmountSecondD < 5) {
+            let input = $('#ingr' + ingredientsAmountSecondD + "secD");
+            input.val(selectIngredientsSecondD.val());
+            input.show();
+        } else {
+            for (let i = 1; i < 5; i++) {
+                let input = $('#ingr' + i + "secD");
+                input.val("");
+                input.hide();
+            }
+            ingredientsAmountSecondD = 1;
+            let input = $('#ingr' + ingredientsAmountSecondD + "secD");
+            input.val(selectIngredientsSecondD.val());
+            input.show();
+        }
+    })
+
     $('#selectDish').change(function () {
         let isLink = document.querySelectorAll('input[name = "isLink"]')
         for (let link of isLink)
@@ -114,7 +170,7 @@
     });
 
     firstBRadio.change(function () {
-        if(!firstBRadio.is("checked", true))
+        if (!firstBRadio.is("checked", true))
             firstAB.attr("action", firstBRadio.val())
     });
 

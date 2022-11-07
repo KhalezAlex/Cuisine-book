@@ -2,6 +2,7 @@ package comklozevitz.cuisinebook.controllers;
 
 import comklozevitz.cuisinebook.entities.Recipe;
 import comklozevitz.cuisinebook.utilities.Reader;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,15 +33,18 @@ public class InitializeBaseController {
     }
 
     @GetMapping("/")
-    public String initializeBase(Model model) throws IOException {
+    public String initializeBase(Authentication auth, Model model) throws IOException {
         flushBase();
-        for (String path: paths)
+        for (String path : paths)
             book.addAll(Reader.getCuisine(path));
         initListNames();
         initSetOfIngredients();
         model.addAttribute("listNames", namesList);
         model.addAttribute("setOfIngredients", setOfIngredients);
         model.addAttribute("allTags", SecondTaskController.getAllTags());
+        if (auth != null)
+            model.addAttribute("isAdmin", auth.getAuthorities().toString().contains("ROLE_ADMIN"));
+//        System.out.println(auth.getAuthorities() + auth.getName());
         return "index";
     }
 
@@ -57,16 +61,17 @@ public class InitializeBaseController {
             book.removeFirst();
     }
 
-    private void initListNames(){
-        if(!book.isEmpty())
-            for(Recipe r : book)
-                namesList.add(r.getName());
+    private void initListNames() {
+        if (!book.isEmpty())
+            if (getNamesList().isEmpty())
+                for (Recipe recipe : book)
+                    namesList.add(recipe.getName());
     }
 
     private void initSetOfIngredients() {
         HashSet<String> temp = new HashSet<>();
         if (!book.isEmpty())
-            for (Recipe r: book)
+            for (Recipe r : book)
                 if (!r.getIngredients().isEmpty())
                     temp.addAll(r.getIngredients());
         setOfIngredients.addAll(temp);

@@ -1,5 +1,6 @@
 package comklozevitz.cuisinebook.controllers;
 
+import com.sun.security.auth.module.NTLoginModule;
 import comklozevitz.cuisinebook.entities.Recipe;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,5 +70,42 @@ public class SecondTaskController {
                 recipesByTag.add(recipe);
         int randomIndex = (int) (Math.random()*recipesByTag.size());
         return recipesByTag.get(randomIndex);
+    }
+
+    @GetMapping("/secondE")
+    public String secondE(Model model, @RequestParam String ingr1, @RequestParam String ingr2,
+                          @RequestParam String ingr3, @RequestParam String ingr4) {
+        LinkedList<String> list = new LinkedList<>();
+        list.add(ingr1);
+        if (!Objects.equals(ingr2, ""))
+            list.add(ingr2);
+        if (!Objects.equals(ingr3, ""))
+            list.add(ingr3);
+        if (!Objects.equals(ingr4, ""))
+            list.add(ingr4);
+        LinkedList<Recipe> recipes = getRecipesWithoutIngredients(list);
+        if (!recipes.isEmpty()) {
+            while (recipes.size() > 10)
+                recipes.removeLast();
+            model.addAttribute("recipes",recipes);
+        }
+        return "secondE";
+    }
+
+    private static LinkedList<Recipe> getRecipesWithoutIngredients(LinkedList<String> ingr) {
+        LinkedList<Recipe> list = new LinkedList<>();
+        boolean notContains;
+        for (Recipe recipe : InitializeBaseController.getBook()) {
+            notContains = true;
+            for (String ingredient : ingr) {
+                if (recipe.getIngredients().contains(ingredient)) {
+                    notContains = false;
+                    break;
+                }
+            }
+            if (notContains)
+                list.add(recipe);
+        }
+        return list;
     }
 }

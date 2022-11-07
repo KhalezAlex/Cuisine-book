@@ -1,6 +1,7 @@
 package comklozevitz.cuisinebook.controllers;
 
 import comklozevitz.cuisinebook.entities.Recipe;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +15,9 @@ import static comklozevitz.cuisinebook.controllers.InitializeBaseController.getI
 @Controller
 public class FirstTaskController {
     @GetMapping("/firstA")
-    public String firstA(Model model, @RequestParam(required = false) String name){
+    public String firstA(Authentication auth, Model model, @RequestParam(required = false) String name){
         Recipe recipe = getInfoRecipe(name);
+        System.out.println(auth.getAuthorities());
         if(recipe != null) {
             model.addAttribute("name", recipe.getName());
             model.addAttribute("cuisine", recipe.getCuisine());
@@ -37,7 +39,7 @@ public class FirstTaskController {
     }
 
     @GetMapping("/firstC")
-    public String ingredientsRecipe(Model model, @RequestParam String ingr1,
+    public String firstC(Model model, @RequestParam String ingr1,
                                     @RequestParam(required = false) String ingr2,
                                     @RequestParam(required = false) String ingr3,
                                     @RequestParam(required = false) String ingr4) {
